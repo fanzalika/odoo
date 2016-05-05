@@ -128,6 +128,10 @@ class WebKitParser(report_sxw):
                 foot_file.write(self._sanitize_html(footer))
             file_to_del.append(foot_file.name)
             command.extend(['--footer-html', foot_file.name])
+            
+        #command.append('--disable-smart-shrinking')
+        command.append('--print-media-type')
+
 
         if webkit_header.margin_top :
             command.extend(['--margin-top', str(webkit_header.margin_top).replace(',', '.')])
@@ -153,6 +157,7 @@ class WebKitParser(report_sxw):
         stderr_fd, stderr_path = tempfile.mkstemp(text=True)
         file_to_del.append(stderr_path)
         try:
+            # print command
             status = subprocess.call(command, stderr=stderr_fd)
             os.close(stderr_fd) # ensure flush before reading
             stderr_fd = None # avoid closing again in finally block
